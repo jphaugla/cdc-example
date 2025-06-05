@@ -2,6 +2,7 @@
 
 Based on https://www.cockroachlabs.com/docs/stable/change-data-capture.html#create-a-changefeed-connected-to-kafka
 
+![highlevel.png](resources/highlevel.png)
 This example consists of 2 parts:
 * A collection of Docker Compose services
     * `roach-source` - single CockroachDB node serving as CDC source
@@ -12,7 +13,7 @@ This example consists of 2 parts:
 
 ## How to Run
 
-1) Execute `./up.sh CRDB_ORG_NAME CRDB_LICENSE_KEY` where `CRDB_ORG_NAME` is your CRDB Enterprise License Org and `CRDB_LICENSE_KEY` is your CRDB Enterprise License Key.  For now, executing `docker-compose up` directly is not supported.  This command will start the required Docker containers.  
+1) `cd docker` Execute `./up.sh CRDB_ORG_NAME CRDB_LICENSE_KEY` where `CRDB_ORG_NAME` is your CRDB Enterprise License Org and `CRDB_LICENSE_KEY` is your CRDB Enterprise License Key.  For now, executing `docker-compose up` directly is not supported.  This command will start the required Docker containers.  
 2) You can verify that each CockroachDB instance is running by visiting the following URLS:
     * Source Cockroach UI - http://localhost:8080
     * Destination Cockroach UI - http://localhost:8081
@@ -38,7 +39,7 @@ Use this to see data in Kafka topic
 docker-compose exec kafka /usr/bin/kafka-console-consumer --bootstrap-server=localhost:9092 --from-beginning --topic=source_table
 ```
 
-Use this to view data in the `soucre` database
+Use this to view data in the `source` database
 ```bash
 docker-compose exec roach-source /cockroach/cockroach sql --insecure --database source --execute="select count(*) from source_table;"
 ```
@@ -52,3 +53,5 @@ List all Kafka topics
 ```bash
 docker-compose exec kafka /usr/bin/kafka-topics --list --zookeeper zookeeper:2181
 ```
+
+More queries to track changefeeds added in the [queries](queries) directory
